@@ -13,7 +13,7 @@ var index = {};
 var parseDir = function(dir) {
   fs.readdir(dir, function(err, files) {
     if (err) {
-      console.debug('error parsing dir..: %s\n', err);
+      console.log('error parsing dir..: %s\n', util.inspect(err));
       return 1;
     }
 
@@ -34,7 +34,7 @@ var parseFiles = function(path, files) {
     else {
       fs.stats(fullPath, function(err, stats) {
         if (err) {
-          console.debug('error: %s\n', err);
+          console.log('error: %s\n', err);
           return 1;
         }
         else {
