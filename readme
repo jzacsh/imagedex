@@ -1,0 +1,1 @@
+keep a JSON index of your images, build index only on inotify-changes alerts.
