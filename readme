@@ -1,1 +1,5 @@
-keep a JSON index of your images, build index only on inotify-changes alerts.
+Keep a JSON index of your images and only re-index what's needed, when
+needed, on inotify's queue.
+
+todo:
+- basic slideshow js front-end.
