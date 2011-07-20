@@ -3,20 +3,13 @@
 var fs = require('fs');
 var util = require('util');
 
-var dirs = [
-  './public/',
-//'./public/paper/',
-//'./public/tablet/',
-]
-
 var index = {};
 
 var parseDir = function(dir) {
   console.log('... parsing directory: %s\n', dir);
   fs.readdir(dir, function(err, files) {
     if (err) {
-      console.log('error parsing dir..: %s\n', util.inspect(err)); //@TODO: remove me!!    
-      return 1;
+      console.log('error parsing dir..: %s\n', util.inspect(err));
     }
 
     parseFiles(dir, files);
@@ -78,11 +71,21 @@ var fileType = function (p) {
 
 console.log('...starting'); //@TODO: remove me!!    
 
-process.argv.forEach(function(val, index, array) {
-  console.log('val[%s]: %s\n', index, val);
-});
+var dirs = (function () {
+  if (process.argv.length > 2) {
+    return process.argv.slice(2);
+  }
+  else {
+    return [
+      './public/',
+      './public/paper/',
+      './public/tablet/',
+    ];
+  }
+})();
 
 for (var d in dirs) {
   parseDir(dirs[d]);
 }
+
 console.log('...done'); //@TODO: remove me!!    
