@@ -54,12 +54,12 @@ var parseDir = function(dir) {
 
 var parseFiles = function(path, f) {
   for (var file in f) {
-    console.log('... parsing file: %s\n', f[file]); //@TODO: remove me!!    
+    console.log('... parsing item: %s\n', f[file]); //@TODO: remove me!!    
 
     var fullPath = path + f[file];
 
     if (isDir(fullPath)) {
-      console.log('...found directory, recursing:\n\t%s', fullPath); //@TODO: remove me!!    
+      console.log('...DIRECTORY, recursing:\n\t%s', fullPath); //@TODO: remove me!!    
       parseDir(fullPath);
     }
     else {
@@ -69,7 +69,7 @@ var parseFiles = function(path, f) {
           return 1;
         }
         else {
-          console.log('stats: %s\n', util.inspect(stats)); //@TODO: remove me!!    
+          console.log('... FILE, stats: %s\n', util.inspect(stats)); //@TODO: remove me!!    
           if (!(path in index)) {
             index[path] = [];
           }
