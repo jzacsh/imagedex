@@ -4,16 +4,18 @@ var fs = require('fs');
 var util = require('util');
 
 var dirs = [
-  './public/img/paper/',
-  './public/img/tablet/',
+  './public/',
+//'./public/paper/',
+//'./public/tablet/',
 ]
 
 var index = {};
 
 var parseDir = function(dir) {
+  console.log('... parsing directory: %s\n', dir);
   fs.readdir(dir, function(err, files) {
     if (err) {
-      console.log('error parsing dir..: %s\n', util.inspect(err));
+      console.log('error parsing dir..: %s\n', util.inspect(err)); //@TODO: remove me!!    
       return 1;
     }
 
@@ -21,37 +23,36 @@ var parseDir = function(dir) {
   });
 }
 
-var parseFiles = function(path, files) {
-  for (var f in files) {
-    console.log('file: %s\n\tobject: %s\n\tfs.stat(): %s\n',
-      files[f], util.inspect(files[f], true), util.inspect(fs.Stats(files[f]).isDirectory()));
+var parseFiles = function(path, f) {
+  for (var file in f) {
+    console.log('... parsing file: %s\n', f[file]); //@TODO: remove me!!    
 
-    var fullPath = dir + files[f];
+    var fullPath = path + f[file];
 
     if (isDir(fullPath)) {
+      console.log(); //@TODO: remove me!!    
       parseDir(fullPath);
     }
     else {
-      fs.stats(fullPath, function(err, stats) {
+      fs.stat(fullPath, function(err, stats) {
         if (err) {
-          console.log('error: %s\n', err);
+          console.log('error: %s\n', err); //@TODO: remove me!!    
           return 1;
         }
         else {
-          console.log('stats: %s\n', stats);
-          index[dir].push({
-            name: files[f],
-            type: fileType(files[f]),
+          console.log('stats: %s\n', util.inspect(stats)); //@TODO: remove me!!    
+          if (!(path in index)) {
+            index[path] = [];
+          }
+          index[path].push({
+            name: f[file],
+            type: fileType(f[file]),
             size: stats.size
           });
         }
       });
     }
   }
-}
-
-for (var d in dirs) {
-  parseDir(dirs[d]);
 }
 
 var isDir = function (path) {
@@ -74,3 +75,14 @@ var fileType = function (p) {
     return null;
   }
 }
+
+console.log('...starting'); //@TODO: remove me!!    
+
+process.argv.forEach(function(val, index, array) {
+  console.log('val[%s]: %s\n', index, val);
+});
+
+for (var d in dirs) {
+  parseDir(dirs[d]);
+}
+console.log('...done'); //@TODO: remove me!!    
