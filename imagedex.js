@@ -6,11 +6,9 @@ var util = require('util');
 var index = {};
 
 var isDir = function (path) {
-  var directory = new Boolean(false);
+  var directory = 0;
   fs.stat(path, function(err, stat) {
     if (!err) {
-      console.log('isDir().. `stat` object:\n\t%s\n',
-        util.inspect(stat.isDirectory()));
       directory = stat.isDirectory();
     }
   });
@@ -34,8 +32,7 @@ var dirs = (function () {
   }
   else {
     return [
-      './public/paper/',
-      './public/tablet/'
+      './public/'
     ];
   }
 })();
@@ -54,7 +51,7 @@ var parseDir = function(dir) {
 
 var parseFiles = function(path, f) {
   for (var file in f) {
-    console.log('... parsing item: %s\n', f[file]); //@TODO: remove me!!    
+    console.log('... parsing something in "%s": %s\n', path, f[file]); //@TODO: remove me!!    
 
     var fullPath = path + f[file];
 
@@ -63,13 +60,16 @@ var parseFiles = function(path, f) {
       parseDir(fullPath);
     }
     else {
+      //@TODO: problem, using ASYNC functions, this callback is run when the
+      //data for _this_ scope is already on the last item (eg.: "tablet")...
+      //consider using [...]Sync() versions of all these `fs` functions.
+
       fs.stat(fullPath, function(err, stats) {
         if (err) {
           console.log('error: %s\n', err); //@TODO: remove me!!    
           return 1;
         }
         else {
-          console.log('... FILE, stats: %s\n', util.inspect(stats)); //@TODO: remove me!!    
           if (!(path in index)) {
             index[path] = [];
           }
@@ -78,13 +78,17 @@ var parseFiles = function(path, f) {
             type: fileType(f[file]),
             size: stats.size
           });
+          console.log('... FILE:\n\tnamed: "%s"\n\tstats: %s\n\n\tfs: %s\n',
+            index[path][index[path].length - 1].name,
+            util.inspect(index[path][index[path].length - 1]),
+            util.inspect(stats)); //@TODO: remove me!!    
         }
       });
     }
   }
 }
 
-console.log('...starting'); //@TODO: remove me!!    
+console.log('STARTING...'); //@TODO: remove me!!    
 
 for (var d in dirs) {
   parseDir(dirs[d]);
