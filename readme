@@ -2,4 +2,5 @@ Keep a JSON index of your images and only re-index what's needed, when
 needed, on inotify's queue.
 
 todo:
+- convert all calls to sync calls
 - basic slideshow js front-end.
