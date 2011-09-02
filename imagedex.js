@@ -40,13 +40,20 @@ var dirs = (function () {
 
 var parseDir = function(dir) {
   console.log('... parsing directory: %s\n', dir);
+  var files = [];
   fs.readdirSync(dir, function(err, files) {
+    //@TODO: why isn't this callback happening??
+
     if (err) {
       console.log('error parsing dir..: %s\n', util.inspect(err));
     }
 
+    console.log('... no prolems reading dir.. moving onto contents...');
+    console.log('contents being passed for inspectioin:');
+    console.log(util.inspect(files));
     parseFiles(dir, files);
   });
+  console.log('... finished parsing directory: %s\n', dir);
 }
 
 var parseFiles = function(path, f) {
@@ -88,8 +95,12 @@ var parseFiles = function(path, f) {
   }
 }
 
-console.log('STARTING...'); //@TODO: remove me!!    
+console.log('STARTING...\nindex looks like:'); //@TODO: remove me!!    
+console.log(index); //@TODO: remove me!!    
 
 for (var d in dirs) {
   parseDir(dirs[d]);
 }
+
+console.log('ENDING...\nindex looks like:'); //@TODO: remove me!!    
+console.log(index); //@TODO: remove me!!    
