@@ -7,7 +7,7 @@ var index = {};
 
 var isDir = function (path) {
   var directory = 0;
-  fs.stat(path, function(err, stat) {
+  fs.statSync(path, function(err, stat) {
     if (!err) {
       directory = stat.isDirectory();
     }
@@ -40,7 +40,7 @@ var dirs = (function () {
 
 var parseDir = function(dir) {
   console.log('... parsing directory: %s\n', dir);
-  fs.readdir(dir, function(err, files) {
+  fs.readdirSync(dir, function(err, files) {
     if (err) {
       console.log('error parsing dir..: %s\n', util.inspect(err));
     }
@@ -64,7 +64,7 @@ var parseFiles = function(path, f) {
       //data for _this_ scope is already on the last item (eg.: "tablet")...
       //consider using [...]Sync() versions of all these `fs` functions.
 
-      fs.stat(fullPath, function(err, stats) {
+      fs.statSync(fullPath, function(err, stats) {
         if (err) {
           console.log('error: %s\n', err); //@TODO: remove me!!    
           return 1;
