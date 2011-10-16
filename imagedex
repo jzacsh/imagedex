@@ -17,7 +17,7 @@ def usage():
 
 def main():
     parser = OptionParser()
-    parser.add_option('-f', '--file', dest='outfile',
+    parser.add_option('-f', '--file', dest='outf',
         help="File you'd like your JSON index written to.")
     (opts, args) = parser.parse_args()
 
@@ -31,8 +31,13 @@ def main():
     index = [ args[0] + '/' + path for path in origindex ]
 
     #finally output data as JSON
-    if opts.outfile:
-      f = io.FileIO(opts.outfile, 'w')
+    if opts.outf:
+      if os.path.isfile(opts.outf) and not os.access(opts.outf, os.W_OK):
+        error = 'File "%s" already exists and is not writeable.' % (opts.outf)
+        sys.stderr.write('%s\n' % error)
+        sys.exit(2)
+
+      f = io.FileIO(opts.outf, 'w')
       f.write(json.dumps(index))
     else:
       print json.dumps(index)
