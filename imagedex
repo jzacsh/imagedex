@@ -56,7 +56,7 @@ def main():
         index += json.dumps([ opts.prefix + path for path in origindex ])
         index += ';' #proper js
     else:
-        index = []
+        index = ''
 
     #finally output data as JSON
     if opts.outf:
