@@ -2,6 +2,9 @@
 
 # imagedex: https://github.com/jzacsh/imagedex
 
+#@TODO: pull this code into some pretty classes so either "__main__" can be
+# called or this file can be included as a proper python module
+
 import os
 import sys
 from optparse import OptionParser
