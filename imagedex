@@ -4,7 +4,9 @@
 
 import os
 import sys
+from optparse import OptionParser
 import simplejson as json
+import io
 
 def usage():
     usage = """
@@ -14,17 +16,26 @@ def usage():
     sys.stderr.write('%s\n' % usage)
 
 def main():
-    if len(sys.argv) != 2 or not os.path.isdir(sys.argv[1]):
+    parser = OptionParser()
+    parser.add_option('-f', '--file', dest='outfile',
+        help="File you'd like your JSON index written to.")
+    (opts, args) = parser.parse_args()
+
+    #sanity check
+    if len(args) != 1 or not os.path.isdir(args[0]):
         usage()
         sys.exit(1)
 
     #get an actual index of requested path
-    origindex = os.listdir(sys.argv[1])
-
-    index = [ sys.argv[1] + '/' + path for path in origindex ]
+    origindex = os.listdir(args[0])
+    index = [ args[0] + '/' + path for path in origindex ]
 
     #finally output data as JSON
-    print json.dumps(index)
+    if opts.outfile:
+      f = io.FileIO(opts.outfile, 'w')
+      f.write(json.dumps(index))
+    else:
+      print json.dumps(index)
 
 if __name__ == '__main__':
     main()
