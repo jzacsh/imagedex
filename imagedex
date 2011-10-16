@@ -23,7 +23,7 @@ def indexer(path, white):
     else:
         return listing
 
-def main():
+def config():
     parser = OptionParser(usage='%prog [options] PATH')
     parser.add_option('-f', '--file', dest='outf',
         help="File you'd like your JSON index written to.")
@@ -33,7 +33,14 @@ def main():
         help="Whitelist of file extensions you'd like exclusively included, comma-delimited.")
     parser.add_option('-n', '--var', dest='var', default='imagedex',
         help="Javascript variable you'd like the JSON assigned to for proper namespacing")
+
+    #@TODO: write section to override options from Config parser!! perhaps -c
+    # flag?
     (opts, args) = parser.parse_args()
+    return (opts, args, parser)
+
+def main():
+    (opts, args, parser) = config()
 
     #sanity check
     if (len(args) != 1 or
