@@ -1,4 +1,5 @@
 #TODO:
+* Write proper unit tests for all our little quirks.
 * Abstract as necessary to turn this into a python module as well as its current CLI utility.
 * Write ability to manage options via ConfigParser config file.
 * Write super-simle python/js web response (eg.: slideshow) in examples/, and use wsgi in the process
