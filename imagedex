@@ -8,14 +8,30 @@ from optparse import OptionParser
 import simplejson as json
 import io
 
+def indexer(path, white):
+    """Return a listing of filesystem {path}, optionally only including files
+    who's extension is in {white}."""
+
+    listing = os.listdir(path)
+
+    if white:
+        approved = []
+        for name in listing:
+            if name.split('.').pop() in white:
+                approved.append(name)
+        return approved
+    else:
+        return listing
+
 def main():
     parser = OptionParser(usage='%prog [options] PATH')
     parser.add_option('-f', '--file', dest='outf',
         help="File you'd like your JSON index written to.")
-    parser.add_option('-p', '--prefix', dest='prefix',
+    parser.add_option('-p', '--prefix', dest='prefix', default='',
         help="Prefix you'd like to utilize for the file paths.")
-    parser.add_option('-n', '--var', dest='var',
-        default='imagedex',
+    parser.add_option('-w', '--white', dest='white',
+        help="Whitelist of file extensions you'd like exclusively included, comma-delimited.")
+    parser.add_option('-n', '--var', dest='var', default='imagedex',
         help="Javascript variable you'd like the JSON assigned to for proper namespacing")
     (opts, args) = parser.parse_args()
 
@@ -27,15 +43,20 @@ def main():
         parser.error(err)
         sys.exit(1)
 
-    #providing default, *after* OptsParse has run
-    if not opts.prefix:
-        opts.prefix = args[0] + '/'
+    #digest our white list
+    if opts.white:
+        white = opts.white.split(',')
+    else:
+        white = opts.white
 
     #get an actual index of requested path
-    origindex = os.listdir(args[0])
-    index = 'var ' + opts.var + ' = ' #proper js
-    index += json.dumps([ opts.prefix + path for path in origindex ])
-    index += ';' #proper js
+    origindex = indexer(args[0], white)
+    if origindex:
+        index = 'var ' + opts.var + ' = ' #proper js
+        index += json.dumps([ opts.prefix + path for path in origindex ])
+        index += ';' #proper js
+    else:
+        index = []
 
     #finally output data as JSON
     if opts.outf:
