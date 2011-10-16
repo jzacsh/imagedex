@@ -36,6 +36,7 @@ def main():
 
         f = io.FileIO(opts.outf, 'w')
         f.write(json.dumps(index))
+        f.close()
     else:
         print json.dumps(index)
 
