@@ -21,7 +21,6 @@ def main():
     #get an actual index of requested path
     origindex = os.listdir(sys.argv[1])
 
-    #@TODO: why can't i modify origindex in place?
     index = [ sys.argv[1] + '/' + path for path in origindex ]
 
     #finally output data as JSON
