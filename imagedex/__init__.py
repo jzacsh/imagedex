@@ -1,9 +1,9 @@
-#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+  Imagedex
 
-# imagedex: https://github.com/jzacsh/imagedex
-
-#@TODO: pull this code into some pretty classes so either "__main__" can be
-# called or this file can be included as a proper python module
+  Generate a JSON representation of a given directory listing.
+"""
 
 import os
 import sys
@@ -13,7 +13,8 @@ import io
 
 def indexer(path, white):
     """Return a listing of filesystem {path}, optionally only including files
-    who's extension is in {white}."""
+    who's extension is in {white}.
+    """
 
     listing = os.listdir(path)
 
@@ -33,14 +34,14 @@ def config():
     parser.add_option('-p', '--prefix', dest='prefix', default='',
         help="Prefix you'd like to utilize for the file paths.")
     parser.add_option('-w', '--white', dest='white',
-        help="""Whitelist of file extensions you'd like exclusively included,
-        comma-delimited.""".replace('  ', ''))
+        help=("Whitelist of file extensions you'd like exclusively included,"
+        ' comma-delimited.'))
     parser.add_option('-n', '--var', dest='var', default='imagedex',
-        help="""Javascript variable you'd like the JSON assigned to for proper
-        namespacing""".replace('  ', ''))
+        help=("Javascript variable you'd like the JSON assigned to for proper"
+        ' namespacin'))
     parser.add_option('-P', '--property', dest='prop', default='files',
-        help="""Javascript property you'd like your array of data to live inside
-        of within the global JSON object.""".replace('  ', ''))
+        help=("Javascript property you'd like your array of data to live"
+        ' inside of within the global JSON object.'))
 
     #@TODO: write section to override options from Config parser!! perhaps -c
     # flag?
@@ -89,8 +90,5 @@ def main():
         f.close()
     else:
         print index
-
-if __name__ == '__main__':
-    main()
 
 # vim: et:ts=4:sw=4:sts=4
