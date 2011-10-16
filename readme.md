@@ -1,5 +1,4 @@
 #TODO:
-* Utilize optparse to allow for flags indicating an output file
 * Write js front-end app (eg.: slideshow) in examples/
 
 #Purpose:
