@@ -61,10 +61,10 @@ def main():
     #more sanity check
     if (opts.outf and os.path.isfile(opts.outf)
         and not os.access(opts.outf, os.W_OK)):
-            err = """File "{0}" already exists and is not writeable.\n""".format(
-                    opts.outf)
-            sys.stderr.write(err)
-            sys.exit(2)
+        err = """File "{0}" already exists and is not writeable.\n""".format(
+                opts.outf)
+        sys.stderr.write(err)
+        sys.exit(2)
 
     #digest our white list
     if opts.white:
