@@ -17,7 +17,7 @@ def main():
     sys.exit(1)
 
   #get an actual index of requested path
-  index = os.listdir(sys.argv[1]) #test data
+  index = os.listdir(sys.argv[1])
 
   #finally output data as JSON
   print json.dumps(index)
