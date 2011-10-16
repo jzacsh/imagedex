@@ -12,7 +12,7 @@ def usage():
   sys.stderr.write('%s\n' % usage)
 
 def main():
-  if len(sys.argv) != 2:
+  if len(sys.argv) != 2 or not os.path.isdir(sys.argv[1]):
     usage()
     sys.exit(1)
 
