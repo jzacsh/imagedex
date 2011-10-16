@@ -19,7 +19,12 @@ def main():
         sys.exit(1)
 
     #get an actual index of requested path
-    index = os.listdir(sys.argv[1])
+    origindex = os.listdir(sys.argv[1])
+
+    #@TODO: why can't i modify origindex in place?
+    index = []
+    for path in origindex:
+      index.append(sys.argv[1] + '/' + path)
 
     #finally output data as JSON
     print json.dumps(index)
