@@ -12,6 +12,9 @@ def main():
     parser = OptionParser(usage='%prog [options] PATH')
     parser.add_option('-f', '--file', dest='outf',
         help="File you'd like your JSON index written to.")
+    parser.add_option('-n', '--var', dest='var',
+        default='imagedex',
+        help="Javascript variable you'd like the JSON assigned to for proper namespacing")
     (opts, args) = parser.parse_args()
 
     #sanity check
@@ -24,7 +27,9 @@ def main():
 
     #get an actual index of requested path
     origindex = os.listdir(args[0])
-    index = [ args[0] + '/' + path for path in origindex ]
+    index = 'var ' + opts.var + ' = ' #proper js
+    index += json.dumps([ args[0] + '/' + path for path in origindex ])
+    index += ';' #proper js
 
     #finally output data as JSON
     if opts.outf:
@@ -35,10 +40,10 @@ def main():
             sys.exit(2)
 
         f = io.FileIO(opts.outf, 'w')
-        f.write(json.dumps(index))
+        f.write(index)
         f.close()
     else:
-        print json.dumps(index)
+        print index
 
 if __name__ == '__main__':
     main()
