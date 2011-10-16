@@ -33,9 +33,14 @@ def config():
     parser.add_option('-p', '--prefix', dest='prefix', default='',
         help="Prefix you'd like to utilize for the file paths.")
     parser.add_option('-w', '--white', dest='white',
-        help="Whitelist of file extensions you'd like exclusively included, comma-delimited.")
+        help="""Whitelist of file extensions you'd like exclusively included,
+        comma-delimited.""".replace('  ', ''))
     parser.add_option('-n', '--var', dest='var', default='imagedex',
-        help="Javascript variable you'd like the JSON assigned to for proper namespacing")
+        help="""Javascript variable you'd like the JSON assigned to for proper
+        namespacing""".replace('  ', ''))
+    parser.add_option('-P', '--property', dest='prop', default='files',
+        help="""Javascript property you'd like your array of data to live inside
+        of within the global JSON object.""".replace('  ', ''))
 
     #@TODO: write section to override options from Config parser!! perhaps -c
     # flag?
@@ -70,9 +75,10 @@ def main():
     #get an actual index of requested path
     origindex = indexer(args[0], white)
     if origindex:
-        index = 'var ' + opts.var + ' = ' #proper js
+        #wrap in some sort of proper javascript
+        index = 'var %s = { %s: ' % (opts.var, opts.prop)
         index += json.dumps([ opts.prefix + path for path in origindex ])
-        index += ';' #proper js
+        index += '};'
     else:
         index = ''
 
