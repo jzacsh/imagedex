@@ -12,6 +12,8 @@ def main():
     parser = OptionParser(usage='%prog [options] PATH')
     parser.add_option('-f', '--file', dest='outf',
         help="File you'd like your JSON index written to.")
+    parser.add_option('-p', '--prefix', dest='prefix',
+        help="Prefix you'd like to utilize for the file paths.")
     parser.add_option('-n', '--var', dest='var',
         default='imagedex',
         help="Javascript variable you'd like the JSON assigned to for proper namespacing")
@@ -25,10 +27,14 @@ def main():
         parser.error(err)
         sys.exit(1)
 
+    #providing default, *after* OptsParse has run
+    if not opts.prefix:
+        opts.prefix = args[0] + '/'
+
     #get an actual index of requested path
     origindex = os.listdir(args[0])
     index = 'var ' + opts.var + ' = ' #proper js
-    index += json.dumps([ args[0] + '/' + path for path in origindex ])
+    index += json.dumps([ opts.prefix + path for path in origindex ])
     index += ';' #proper js
 
     #finally output data as JSON
