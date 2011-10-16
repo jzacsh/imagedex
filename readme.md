@@ -1,5 +1,6 @@
 #TODO:
-* Write js front-end app (eg.: slideshow) in examples/
+* Write ability to manage options via ConfigParser config file.
+* Write super-simle python/js web response (eg.: slideshow) in examples/, and use wsgi in the process
 
 #Purpose:
   Keep a JSON index of your images and only re-index what's needed, when
