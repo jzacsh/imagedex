@@ -45,9 +45,9 @@ def main():
 
     #digest our white list
     if opts.white:
-        white = opts.white.split(',')
+        white = opts.white.lower().split(',')
     else:
-        white = opts.white
+        white = opts.white.lower()
 
     #get an actual index of requested path
     origindex = indexer(args[0], white)
