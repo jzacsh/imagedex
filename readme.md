@@ -1,11 +1,6 @@
-#Warning:
-  This is an experimental project for the sake of learning. If you have an
-  application aiming for high concurrency, you probably should not do things
-  like this (ie.: reading from a filesystem with node.js) ... but then, you
-  probably already know that ;).
-
-##Note:
-  All code here is written with sync operations.
+#TODO:
+* Port this application to python
+* Write js front-end app (eg.: slideshow) in examples/
 
 #Purpose:
   Keep a JSON index of your images and only re-index what's needed, when
@@ -15,6 +10,3 @@
   I intend to run this script as a response to inotify events; only generating
   a .json file when something in the target has supposedly changed.
 
-##TODO:
-* convert all calls to sync calls
-* basic slideshow js front-end
