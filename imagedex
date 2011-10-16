@@ -8,13 +8,6 @@ from optparse import OptionParser
 import simplejson as json
 import io
 
-def usage():
-    usage = """
-    Usage: %s PATH
-        Generate JSON representation of the given directory, PATH.
-    """ % (sys.argv[0])
-    sys.stderr.write('%s\n' % usage)
-
 def main():
     parser = OptionParser(usage='%prog [options] PATH')
     parser.add_option('-f', '--file', dest='outf',
