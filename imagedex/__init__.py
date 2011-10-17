@@ -40,7 +40,7 @@ class Imagedex():
         """Initalize configuration if not already there
         """
         if conf:
-            self.conf = conf.conf
+            self.conf = conf
         else:
             #initialize conf from config files, ourself
             (dots, parser) = config()

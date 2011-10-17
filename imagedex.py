@@ -6,6 +6,7 @@
   Command-line utility wrapping imagedex methods.
 """
 
+import os
 import imagedex as imagedex
 
 def config():
@@ -38,8 +39,10 @@ def config():
 
 def cli():
     opts = config()
-    imaged = imagedex.imagedex(opts)
-    imaged
+    imaged = imagedex.Imagedex(opts)
+
+    #call the necessary functions in Imagedex class to product index var
+    index = imaged.index()
 
     #finally output data as JSON
     if opts.outf:
