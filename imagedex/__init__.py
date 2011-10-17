@@ -11,22 +11,6 @@ from optparse import OptionParser
 import simplejson as json
 import io
 
-def indexer(path, white):
-    """Return a listing of filesystem {path}, optionally only including files
-    who's extension is in {white}.
-    """
-
-    listing = os.listdir(path)
-
-    if white:
-        approved = []
-        for name in listing:
-            if name.split('.').pop() in white:
-                approved.append(name)
-        return approved
-    else:
-        return listing
-
 def config():
     parser = OptionParser(usage='%prog [options] PATH')
     parser.add_option('-f', '--file', dest='outf',
@@ -43,52 +27,61 @@ def config():
         help=("Javascript property you'd like your array of data to live"
         ' inside of within the global JSON object.'))
 
-    #@TODO: write section to override options from Config parser!! perhaps -c
-    # flag?
-    (opts, args) = parser.parse_args()
-    return (opts, args, parser)
+    #@TODO: return a list of both critical CLI and ConfigPars data
+    # - return critical CLI-data (eg.: parser object) 
+    # - return critical ConfigParser data
+    # This should allow any caller utilize the tools returned
+    dots = {} #@TODO: make this real ^
 
-def main():
-    (opts, args, parser) = config()
+    return (dots, parser)
 
-    #sanity check
-    if (len(args) != 1 or
-    not os.path.isdir(args[0]) or
-    not os.access(args[0], os.R_OK)):
-        err = 'You must pass a readable directory, PATH, to be indexed.'
-        parser.error(err)
-        sys.exit(1)
+class Imagedex():
+    def __init__(self, conf):
+        """Initalize configuration if not already there
+        """
+        if conf:
+            self.conf = conf.conf
+        else:
+            #initialize conf from config files, ourself
+            (dots, parser) = config()
 
-    #more sanity check
-    if (opts.outf and os.path.isfile(opts.outf)
-        and not os.access(opts.outf, os.W_OK)):
-        err = """File "{0}" already exists and is not writeable.\n""".format(
-            opts.outf)
-        sys.stderr.write(err)
-        sys.exit(2)
+    def index():
+        """Return our final JSON string given our self.conf list has been
+        properly initialized.
+        """
+        #digest our white list
+        if self.conf.white:
+            white = self.conf.white.lower().split(',')
+        else:
+            white = self.conf.white
 
-    #digest our white list
-    if opts.white:
-        white = opts.white.lower().split(',')
-    else:
-        white = opts.white
+        #get an actual index of requested path
+        origindex = indexer(self.conf.path, white)
+        if origindex:
+            #wrap in some sort of proper javascript
+            index = 'var %s = { %s: ' % (self.conf.var, self.conf.prop)
+            index += json.dumps([ self.conf.prefix + path for path in origindex ])
+            index += '};'
+        else:
+            index = ''
 
-    #get an actual index of requested path
-    origindex = indexer(args[0], white)
-    if origindex:
-        #wrap in some sort of proper javascript
-        index = 'var %s = { %s: ' % (opts.var, opts.prop)
-        index += json.dumps([ opts.prefix + path for path in origindex ])
-        index += '};'
-    else:
-        index = ''
+        return index
 
-    #finally output data as JSON
-    if opts.outf:
-        f = io.FileIO(opts.outf, 'w')
-        f.write(index)
-        f.close()
-    else:
-        print index
+    def indexer(path, white):
+        """Return a listing of filesystem {path}, optionally only including files
+        who's extension is in {white}.
+        """
+
+        listing = os.listdir(path)
+
+        if white:
+            approved = []
+            for name in listing:
+                if name.split('.').pop() in white:
+                    approved.append(name)
+            return approved
+        else:
+            return listing
+
 
 # vim: et:ts=4:sw=4:sts=4
