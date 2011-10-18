@@ -1,7 +1,5 @@
 #TODO:
 * Write proper unit tests for all our little quirks.
-* Abstract imagedex/__init__.py as necessary to make sure it only returns methods, like a proper python module
-* Pull CLI-only code from imagedex/__init__.py into imagedex/imagedex.py
 * Write ability to manage options via ConfigParser config file.
 * Write super-simle python/js web response (eg.: slideshow) in examples/, and use wsgi in the process
 
