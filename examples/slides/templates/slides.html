@@ -2,12 +2,14 @@
 <html lang="en">
   <head>
     <title>{{ data.title }}</title>
+    <link rel="stylesheet" type="text/css"
+      href="{% url_for('static', filename="slides.css") %}" />
+    <script type="text/javascript"
+      src="{% url_for('static', filename='slides.js') %}"></script>
+    <script type="text/javascript"
+      src="{% url_for('static', filename='show.js') %}"></script>
   </head>
   <body>
-  {% if data.slide %}
-    <p>Slide file &quot;{{ data.slide }}&quot;</p>
-  {% else %}
-    <p>Pass a slide as an argument!</p>
-  {% endif %}
+    <p>Start <a id="start" href="#">slides</a>!</p>
   </body>
 </html>
