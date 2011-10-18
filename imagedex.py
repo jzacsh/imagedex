@@ -7,6 +7,7 @@
 """
 
 import os
+import sys
 import imagedex as imagedex
 
 def config():

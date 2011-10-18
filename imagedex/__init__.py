@@ -45,7 +45,7 @@ class Imagedex():
             #initialize conf from config files, ourself
             (dots, parser) = config()
 
-    def index():
+    def index(self):
         """Return our final JSON string given our self.conf list has been
         properly initialized.
         """
@@ -56,7 +56,7 @@ class Imagedex():
             white = self.conf.white
 
         #get an actual index of requested path
-        origindex = indexer(self.conf.path, white)
+        origindex = self.indexer(self.conf.path, white)
         if origindex:
             #wrap in some sort of proper javascript
             index = 'var %s = { %s: ' % (self.conf.var, self.conf.prop)
@@ -67,7 +67,7 @@ class Imagedex():
 
         return index
 
-    def indexer(path, white):
+    def indexer(self, path, white):
         """Return a listing of filesystem {path}, optionally only including files
         who's extension is in {white}.
         """
