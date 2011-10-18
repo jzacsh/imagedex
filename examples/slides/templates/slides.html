@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ data.title }}</title>
+  </head>
+  <body>
+  {% if data.slide %}
+    <p>Slide file &#40;{{ data.slide }}&#41;</p>
+  {% else %}
+    <p>Pass a slide as an argument!</p>
+  {% endif %}
+  </body>
+</html>
