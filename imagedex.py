@@ -15,8 +15,7 @@ def config():
     setup by the imagedex code itself.
     """
 
-    #@TODO: take our future dot-file config into consideration!
-    (dots, parser) = imagedex.config()
+    (dots, parser) = imagedex.config() #@TODO: take our future dot-file config into consideration!
     (opts, args) = parser.parse_args()
 
     #sanity check
@@ -39,10 +38,10 @@ def config():
     return opts
 
 def cli():
-    opts = config()
+    opts = config() #wrapper to config, specific to cli
     imaged = imagedex.Imagedex(opts)
 
-    #call the necessary functions in Imagedex class to product index var
+    #call the necessary functions in Imagedex class to produce actual index
     index = imaged.index()
 
     #finally output data as JSON
