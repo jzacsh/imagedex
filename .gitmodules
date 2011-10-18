@@ -1,0 +1,3 @@
+[submodule "example"]
+	path = example
+	url = git@jzacsh.com:study/jslides.git
