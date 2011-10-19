@@ -7,6 +7,7 @@
 """
 
 import os
+import io
 import sys
 import imagedex as imagedex
 
