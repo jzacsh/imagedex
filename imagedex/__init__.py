@@ -36,7 +36,7 @@ def config():
     return (dots, parser)
 
 class Imagedex():
-    def __init__(self, conf):
+    def __init__(self, conf=None):
         """Initalize configuration if not already there
         """
         if conf:
