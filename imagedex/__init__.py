@@ -60,12 +60,22 @@ class Imagedex():
         if origindex:
             #wrap in some sort of proper javascript
             index = 'var %s = { %s: ' % (self.conf.var, self.conf.prop)
-            index += json.dumps([ self.conf.prefix + path for path in origindex ])
+            index += json.dumps([ self._prefix() + path for path in origindex ])
             index += '};'
         else:
             index = ''
 
         return index
+
+    def _prefix(self):
+        """Generate a default prefix based on our base PATH
+        """
+        if not self.conf:
+            return None
+        elif self.conf.prefix:
+            return self.conf.prefix
+            #return None #real return
+        return self.conf.path
 
     def indexer(self, path, white):
         """Return a listing of filesystem {path}, optionally only including files
