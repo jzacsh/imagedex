@@ -26,6 +26,9 @@ def config():
     parser.add_option('-P', '--property', dest='prop', default='files',
         help=("Javascript property you'd like your array of data to live"
         ' inside of within the global JSON object.'))
+    parser.add_option('-N', '--native', dest='native', action="store_true",
+        default=False, help='Output native python data, for instead of '
+        'converting to JSON.')
 
     #@TODO: return a list of both critical CLI and ConfigPars data
     # - return critical CLI-data (eg.: parser object) 
@@ -57,7 +60,9 @@ class Imagedex():
 
         #get an actual index of requested path
         origindex = self.indexer(self.conf.path, white)
-        if origindex:
+        if self.conf.native:
+            index = origindex
+        elif origindex:
             #wrap in some sort of proper javascript
             index = 'var %s = { %s: ' % (self.conf.var, self.conf.prop)
             index += json.dumps([ self._prefix() + path for path in origindex ])
