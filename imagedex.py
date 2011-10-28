@@ -16,7 +16,7 @@ def config():
     setup by the imagedex code itself.
     """
 
-    (dots, parser) = imagedex.config() #@TODO: take our future dot-file config into consideration!
+    parser = imagedex.config()
     (opts, args) = parser.parse_args()
 
     #sanity check

@@ -11,32 +11,51 @@ from optparse import OptionParser
 import simplejson as json
 import io
 
+class _dotdict(dict):
+    """Hackery to mimmic the dot notation of optpasre.parse_args()
+    """
+    def __getattr__(self, attr):
+        return self.get(attr, None)
+    __setattr__= dict.__setitem__
+    __delattr__= dict.__delitem__
+
+def config_defaults():
+    """Imagedex default options
+    """
+    defaults = _dotdict()
+
+    defaults.path = None
+    defaults.outf = None
+    defaults.prefix = ''
+    defaults.white = None
+    defaults.var = 'imagedex'
+    defaults.prop = 'files'
+    defaults.native = False
+    return defaults
+
 def config():
+    """Definition for acceptable options with python's optparse library.
+    """
+    defs = config_defaults()
     parser = OptionParser(usage='%prog [options] PATH')
     parser.add_option('-f', '--file', dest='outf',
         help="File you'd like your JSON index written to.")
-    parser.add_option('-p', '--prefix', dest='prefix', default='',
+    parser.add_option('-p', '--prefix', dest='prefix', default=defs.prefix,
         help="Prefix you'd like to utilize for the file paths.")
     parser.add_option('-w', '--white', dest='white',
         help=("Whitelist of file extensions you'd like exclusively included,"
         ' comma-delimited.'))
-    parser.add_option('-n', '--var', dest='var', default='imagedex',
+    parser.add_option('-n', '--var', dest='var', default=defs.var,
         help=("Javascript variable you'd like the JSON assigned to for proper"
         ' namespacin'))
-    parser.add_option('-P', '--property', dest='prop', default='files',
+    parser.add_option('-P', '--property', dest='prop', default=defs.prop,
         help=("Javascript property you'd like your array of data to live"
         ' inside of within the global JSON object.'))
-    parser.add_option('-N', '--native', dest='native', action="store_true",
-        default=False, help='Output native python data, for instead of '
-        'converting to JSON.')
+    parser.add_option('-N', '--native', dest='native', action='store_true',
+        default=defs.native, help='Output native python data, for instead of'
+        ' converting to JSON.')
 
-    #@TODO: return a list of both critical CLI and ConfigPars data
-    # - return critical CLI-data (eg.: parser object) 
-    # - return critical ConfigParser data
-    # This should allow any caller utilize the tools returned
-    dots = {} #@TODO: make this real ^
-
-    return (dots, parser)
+    return parser
 
 class Imagedex():
     def __init__(self, conf=None):
@@ -45,8 +64,7 @@ class Imagedex():
         if conf:
             self.conf = conf
         else:
-            #initialize conf from config files, ourself
-            (dots, parser) = config()
+            self.conf = config_defaults()
 
     def index(self):
         """Return our final JSON string given our self.conf list has been

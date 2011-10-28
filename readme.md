@@ -1,6 +1,5 @@
 #TODO:
 * Write proper unit tests for all our little quirks.
-* Write ability to manage options via ConfigParser config file.
 
 #Purpose:
   Generate a JSON representation of a given directory listing.
