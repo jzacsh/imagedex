@@ -60,13 +60,14 @@ class Imagedex():
 
         #get an actual index of requested path
         origindex = self.indexer(self.conf.path, white)
-        if self.conf.native:
-            index = origindex
-        elif origindex:
-            #wrap in some sort of proper javascript
-            index = 'var %s = { %s: ' % (self.conf.var, self.conf.prop)
-            index += json.dumps([ self._prefix() + path for path in origindex ])
-            index += '};'
+        if origindex:
+            if self.conf.native:
+                index = origindex
+            else:
+                #wrap in some sort of proper javascript
+                index = 'var %s = { %s: ' % (self.conf.var, self.conf.prop)
+                index += json.dumps([ self._prefix() + path for path in origindex ])
+                index += '};'
         else:
             index = ''
 
