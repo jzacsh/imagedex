@@ -1,5 +1,4 @@
 #TODO:
-* Default to a prefix (-p) of whatever PATH argument was, regardless of passing -p.
 * Write proper unit tests for all our little quirks.
 * Write ability to manage options via ConfigParser config file.
 * Write a super-simple javascript slideshow based on JSON data
