@@ -1,4 +1,5 @@
 #TODO:
+* Add recursive option, -r
 * Write proper unit tests for all our little quirks.
 
 #Purpose:
