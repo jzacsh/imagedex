@@ -45,9 +45,6 @@ def config():
     parser.add_option('-w', '--white', dest='white',
         help=("Whitelist of file extensions you'd like exclusively included,"
         ' comma-delimited.'))
-    parser.add_option('-n', '--var', dest='var', default=defs.var,
-        help=("Javascript variable you'd like the JSON assigned to for proper"
-        ' namespacin'))
     parser.add_option('-P', '--property', dest='prop', default=defs.prop,
         help=("Javascript property you'd like your array of data to live"
         ' inside of within the global JSON object.'))
@@ -83,9 +80,9 @@ class Imagedex():
                 index = origindex
             else:
                 #wrap in some sort of proper javascript
-                index = 'var %s = { %s: ' % (self.conf.var, self.conf.prop)
+                index = '{ "%s": ' % (self.conf.prop)
                 index += json.dumps([ self._prefix() + path for path in origindex ])
-                index += '};'
+                index += '}'
         else:
             index = ''
 
