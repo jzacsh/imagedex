@@ -106,13 +106,12 @@ class Imagedex():
         listing = os.listdir(path)
 
         if white:
-            approved = []
+            passed = []
             for name in listing:
                 if name.split('.').pop() in white:
-                    approved.append(name)
-            return approved
+                    passed.append(name)
+            return passed
         else:
             return listing
-
 
 # vim: et:ts=4:sw=4:sts=4
