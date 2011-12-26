@@ -26,6 +26,7 @@ def config_defaults():
 
     defaults.path = None
     defaults.outf = None
+    defaults.recursive = False
     defaults.prefix = ''
     defaults.white = None
     defaults.var = 'imagedex'
@@ -40,6 +41,9 @@ def config():
     parser = OptionParser(usage='%prog [options] PATH')
     parser.add_option('-f', '--file', dest='outf',
         help="File you'd like your JSON index written to.")
+    parser.add_option('-r', '--recursive', dest='recursive',
+            action='store_true', default=defs.recursive,
+        help="Recursively index any given directories in PATH.")
     parser.add_option('-p', '--prefix', dest='prefix', default=defs.prefix,
         help="Prefix you'd like to utilize for the file paths.")
     parser.add_option('-w', '--white', dest='white',
@@ -74,7 +78,7 @@ class Imagedex():
             white = self.conf.white
 
         #get an actual index of requested path
-        origindex = self.indexer(self.conf.path, white)
+        origindex = self.indexer(self.conf.path, self.conf)
         if origindex:
             if self.conf.native:
                 index = origindex
@@ -98,20 +102,42 @@ class Imagedex():
             #return None #real return
         return self.conf.path
 
-    def indexer(self, path, white):
+    def indexer(self, path):
         """Return a listing of filesystem {path}, optionally only including files
         who's extension is in {white}.
         """
 
         listing = os.listdir(path)
+        print('path') #@TODO: remove me!!    
+        print(listing) #@TODO: remove me!!    
 
-        if white:
-            passed = []
-            for name in listing:
-                if name.split('.').pop() in white:
-                    passed.append(name)
-            return passed
+        passed = []
+
+        #@TODO: refactor to build our structure as such:
+        # lists of files, where files that are directories are tuples, with the
+        # first key as their directory-name, and the second key as their list
+        # of files (dirctory contents). eg.:
+        #    [
+        #        'f1',
+        #        {'f2 (a dir)': [
+        #            'file1',
+        #            'file2',
+        #            {'sub3 dir': [
+        #                'boop', 'doop'
+        #                ]
+        #            }
+        #            ]
+        #        }
+        #    ]
+        if self.conf.recursive:
         else:
-            return listing
+            if self.conf.white:
+                for name in listing:
+                    if name.split('.').pop() in white:
+                        passed.append(name)
+                return passed
+            else:
+
+                return passed
 
 # vim: et:ts=4:sw=4:sts=4
