@@ -78,8 +78,16 @@ class Imagedex():
             white = self.conf.white
 
         #get an actual index of requested path
-        origindex = self.indexer(self.conf.path, self.conf)
+        origindex = self.indexer()
         if origindex:
+            #origindex:  //@TODO: remove me!!    
+            # ('item#', "item's dirs", "item's files")
+            print('(debugging) origindex') #/@TODO: remove me!!    
+            print(origindex)
+
+            if self.conf.recursive:
+                pass #@TODO
+
             if self.conf.native:
                 index = origindex
             else:
@@ -102,42 +110,30 @@ class Imagedex():
             #return None #real return
         return self.conf.path
 
-    def indexer(self, path):
+    def indexer(self):
         """Return a listing of filesystem {path}, optionally only including files
         who's extension is in {white}.
         """
 
-        listing = os.listdir(path)
-        print('path') #@TODO: remove me!!    
-        print(listing) #@TODO: remove me!!    
-
         passed = []
 
-        #@TODO: refactor to build our structure as such:
-        # lists of files, where files that are directories are tuples, with the
-        # first key as their directory-name, and the second key as their list
-        # of files (dirctory contents). eg.:
-        #    [
-        #        'f1',
-        #        {'f2 (a dir)': [
-        #            'file1',
-        #            'file2',
-        #            {'sub3 dir': [
-        #                'boop', 'doop'
-        #                ]
-        #            }
-        #            ]
-        #        }
-        #    ]
+        # determine how much data we want, depending on recurisve option
         if self.conf.recursive:
+            listing = os.walk(self.conf.path)
         else:
-            if self.conf.white:
-                for name in listing:
-                    if name.split('.').pop() in white:
-                        passed.append(name)
-                return passed
-            else:
+            listing = os.listdir(self.conf.path)
 
-                return passed
+        # collect our data, regardless of depth, depending on our need for
+        # white-listing.
+        for name in listing:
+            if self.conf.white:
+                if name.split('.').pop() in white:
+                    #this is a file with an extension we actually want.
+                    passed.append(name)
+            else:
+                #we want files, regardless of extension
+                passed.append(name)
+
+        return passed
 
 # vim: et:ts=4:sw=4:sts=4
