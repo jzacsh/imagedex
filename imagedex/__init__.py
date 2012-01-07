@@ -11,6 +11,13 @@ from optparse import OptionParser
 import simplejson as json
 import io
 
+#@TODO: remove these globals and put them somewhere better, once you're done
+# coding with them!!
+LABEL = 0
+DIRS  = 1
+FILES = 2
+################
+
 class _dotdict(dict):
     """Hackery to mimmic the dot notation of optpasre.parse_args()
     """
@@ -79,25 +86,41 @@ class Imagedex():
             white = self.conf.white
 
         #get an actual index of requested path
-        origindex = self.indexer()
-        if origindex:
-            #origindex:  //@TODO: remove me!!    
+        self.nativeindex = self.indexer()
+        if self.nativeindex:
+            #self.nativeindex:  //@TODO: remove me!!    
             # ('item#', "item's dirs", "item's files")
-            print('(debugging) origindex') #/@TODO: remove me!!    
-            print(origindex)
-
-            if self.conf.recursive:
-                pass #@TODO
+            print('(debugging) self.nativeindex') #/@TODO: remove me!!    
+            print(self.nativeindex)
 
             if self.conf.native:
-                index = origindex
+                index = self.nativeindex
             else:
                 #wrap in some sort of proper javascript
                 index = '{ "%s": ' % (self.conf.prop)
-                index += json.dumps([ self._prefix() + path for path in origindex ])
+
+                #prepare a python-list of items to pass to json.dumps()
+                items = []
+                if self.conf.recursive:
+                    #TODO: coding this recursion, assume first that everything
+                    # one level down is a file, then pull this out as a function
+                    # and call it when we encounter *more* than files.
+
+                    index += self.recurseJSON(items)
+
+                else:
+                    for item in self.nativeindex:
+                        items.append(self._prefix() + item)
+                    index += json.dumps(items)
+
+
                 index += '}'
         else:
-            index = ''
+            #no data
+            if self.conf.native:
+                index = self.nativeindex
+            else:
+                index = '{ "%s": [] } ' % (self.conf.prop)
 
         return index
 
@@ -136,5 +159,68 @@ class Imagedex():
                 passed.append(name)
 
         return passed
+
+    def recurseJSON(self, items)
+        """Map our native, python data structure of os.walk to, to something
+        easily passed to json.dumps().
+
+        os.walk produces a list of tuples as such:
+            [('item#', "item's dirs", "item's files"), (...), ... ]
+
+        we want a structure, in JSON, as such:
+            lists of files, where files that are directories are tuples, with
+            the first key as their directory-name, and the second key as their
+            list of files (dirctory contents). eg.:
+               [
+                   #python list is our JSON array
+
+                   'f1',
+
+                   #python dictionary is our JSON object
+                   {
+                   'f2 (a dir)': [
+                       #everything in this list is identical in concept to the
+                       # very outter list.
+                       'file1',
+                       'file2',
+                       {
+                       'sub3 dir': [
+                           'boop', 'doop'
+                           ]
+                       }
+                       ]
+                   },
+
+                   'f3'
+               ]
+        """
+
+        index = ''
+
+        depth = len(self.nativeindex[0][DIRS])
+        rendering = 0
+        #recurse, down directories
+        while (rendering <= depth):
+            for item in self.nativeindex[rendering]:
+                index += self.renderJSONFiles(item[FILES])
+                index += self.renderJSONDirs(item[DIRS])
+            rendering += 1
+
+        return index
+
+    def renderJSONFiles(self, files)
+        """render files, according to the JSON format we publish"""
+        index = ''
+        for item in files:
+            index += json.dumps(item)
+        return index
+
+    def renderJSONDirs(self, dirs)
+        """render directories, according to the JSON format we publish"""
+        # index += json.dumps(item)
+        index = ' { "%s": '
+        for item in dirs:
+            index += json.dumps(item)
+        return index
 
 # vim: et:ts=4:sw=4:sts=4
