@@ -54,7 +54,8 @@ def config():
         ' inside of within the global JSON object.'))
     parser.add_option('-N', '--native', dest='native', action='store_true',
         default=defs.native, help='Output native python data, for instead of'
-        ' converting to JSON.')
+        ' converting to JSON. (Note: returned data structure is different,'
+        ' depending on -r flag).')
 
     return parser
 
