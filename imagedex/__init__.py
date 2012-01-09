@@ -195,11 +195,11 @@ class Imagedex():
 
         depth = len(self.nativeindex[0][DIRS])
         self.rendering = 0
-        #recurse, down directories
+        #recurse, down directory listings
         while (self.rendering <= depth):
-            for directory in self.nativeindex[self.rendering]:
-                self.renderJSONFiles(directory[FILES])
-                self.renderJSONDirs(directory[DIRS])
+            for listing in self.nativeindex[self.rendering]:
+                self.renderJSONFiles(listing[FILES])
+                self.renderJSONDirs()
             self.rendering += 1
 
         return index
@@ -209,12 +209,13 @@ class Imagedex():
         for item in files:
             self.items.append(item)
 
-    def renderJSONDirs(self, dirs):
+    def renderJSONDirs(self):
         """render directories, according to the JSON format we publish"""
-        # index += json.dumps(item)
-        for idx,item in enumerate(dirs):
-            #TODO: ????????
-            self.renderJSONFiles(self.nativeindex[self.rendering][idx + rendering][FILES])
-            self.renderJSONDirs(self.nativeindex[self.rendering][idx + rendering][DIRS])
+        #@TODO: for your purposes: give up and go only one-directory down (eg.:
+        # go one level down in this function, and call renderJSONFiles on
+        # self.nativeindex[self.rendering][FILES])
+        for item in self.nativeindex[self.rendering][DIRS]:
+            self.renderJSONFiles(self.nativeindex[self.rendering][idx + self.rendering][DIRS])
+            self.renderJSONDirs(self.nativeindex[self.rendering][idx + self.rendering][DIRS])
 
 # vim: et:ts=4:sw=4:sts=4
