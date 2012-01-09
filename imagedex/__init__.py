@@ -88,11 +88,6 @@ class Imagedex():
         #get an actual index of requested path
         self.nativeindex = self.indexer()
         if self.nativeindex:
-            #self.nativeindex:  //@TODO: remove me!!    
-            # ('item#', "item's dirs", "item's files")
-            print('(debugging) self.nativeindex') #/@TODO: remove me!!    
-            print(self.nativeindex)
-
             if self.conf.native:
                 index = self.nativeindex
             else:
@@ -100,20 +95,22 @@ class Imagedex():
                 index = '{ "%s": ' % (self.conf.prop)
 
                 #prepare a python-list of items to pass to json.dumps()
-                items = []
+                self.items = []
                 if self.conf.recursive:
-                    #TODO: coding this recursion, assume first that everything
-                    # one level down is a file, then pull this out as a function
-                    # and call it when we encounter *more* than files.
-
-                    index += self.recurseJSON(items)
+                    #rebuild self.nativeindex using new structure, self.items,
+                    # to be useful to json.dumps()
+                    self.recurseJSON()
 
                 else:
+                    #dealing with only files is simple, structure is already
+                    #useful to json.dumps()
                     for item in self.nativeindex:
-                        items.append(self._prefix() + item)
-                    index += json.dumps(items)
+                        self.items.append(self._prefix() + item)
 
+                #let simplejson.dumps() do its thing
+                index += json.dumps(self.items)
 
+                #finish outter JSON wrapping.
                 index += '}'
         else:
             #no data
@@ -160,7 +157,7 @@ class Imagedex():
 
         return passed
 
-    def recurseJSON(self, items)
+    def recurseJSON(self):
         """Map our native, python data structure of os.walk to, to something
         easily passed to json.dumps().
 
@@ -194,33 +191,30 @@ class Imagedex():
                    'f3'
                ]
         """
-
         index = ''
 
         depth = len(self.nativeindex[0][DIRS])
-        rendering = 0
+        self.rendering = 0
         #recurse, down directories
-        while (rendering <= depth):
-            for item in self.nativeindex[rendering]:
-                index += self.renderJSONFiles(item[FILES])
-                index += self.renderJSONDirs(item[DIRS])
-            rendering += 1
+        while (self.rendering <= depth):
+            for directory in self.nativeindex[self.rendering]:
+                self.renderJSONFiles(directory[FILES])
+                self.renderJSONDirs(directory[DIRS])
+            self.rendering += 1
 
         return index
 
-    def renderJSONFiles(self, files)
+    def renderJSONFiles(self, files):
         """render files, according to the JSON format we publish"""
-        index = ''
         for item in files:
-            index += json.dumps(item)
-        return index
+            self.items.append(item)
 
-    def renderJSONDirs(self, dirs)
+    def renderJSONDirs(self, dirs):
         """render directories, according to the JSON format we publish"""
         # index += json.dumps(item)
-        index = ' { "%s": '
-        for item in dirs:
-            index += json.dumps(item)
-        return index
+        for idx,item in enumerate(dirs):
+            #TODO: ????????
+            self.renderJSONFiles(self.nativeindex[self.rendering][idx + rendering][FILES])
+            self.renderJSONFiles(self.nativeindex[self.rendering][idx + rendering][DIRS])
 
 # vim: et:ts=4:sw=4:sts=4
