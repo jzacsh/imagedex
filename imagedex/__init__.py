@@ -215,6 +215,6 @@ class Imagedex():
         for idx,item in enumerate(dirs):
             #TODO: ????????
             self.renderJSONFiles(self.nativeindex[self.rendering][idx + rendering][FILES])
-            self.renderJSONFiles(self.nativeindex[self.rendering][idx + rendering][DIRS])
+            self.renderJSONDirs(self.nativeindex[self.rendering][idx + rendering][DIRS])
 
 # vim: et:ts=4:sw=4:sts=4
