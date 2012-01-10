@@ -194,12 +194,13 @@ class Imagedex():
 
         depth = len(self.nativeindex[0][DIRS])
         self.rendering = 0
-        #recurse, down directory listings
+        #@TODO: recurse, down directory listings
         while (self.rendering <= depth):
             listing = self.nativeindex[self.rendering]
             self.renderJSONFiles(listing[FILES])
             self.renderJSONDirs()
             self.rendering += 1
+            break #@TODO: remove this if you ever write true recursion
 
         return index
 
