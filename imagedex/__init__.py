@@ -11,12 +11,10 @@ from optparse import OptionParser
 import simplejson as json
 import io
 
-#@TODO: remove these globals and put them somewhere better, once you're done
-# coding with them!!
-LABEL = 0
-DIRS  = 1
-FILES = 2
-################
+#make code in this file a bit more readable
+OSW_LABEL = 0
+OSW_DIRS  = 1
+OSW_FILES = 2
 
 class _dotdict(dict):
     """Hackery to mimmic the dot notation of optpasre.parse_args()
@@ -192,12 +190,12 @@ class Imagedex():
         """
         index = ''
 
-        depth = len(self.nativeindex[0][DIRS])
+        depth = len(self.nativeindex[0][OSW_DIRS])
         self.rendering = 0
         #@TODO: recurse, down directory listings
         while (self.rendering <= depth):
             listing = self.nativeindex[self.rendering]
-            self.renderJSONFiles(listing[FILES])
+            self.renderJSONFiles(listing[OSW_FILES])
             self.renderJSONDirs()
             self.rendering += 1
             break #@TODO: remove this if you ever write true recursion
@@ -215,13 +213,13 @@ class Imagedex():
         @note: for the purposes of this project's actual deployment, real
         recursion wasn't needed. only a single level is traversed.
         """
-        for item in self.nativeindex[self.rendering][DIRS]:
+        for item in self.nativeindex[self.rendering][OSW_DIRS]:
             subDir = { item : [] }
 
             #find the directory listing in our tuple, that represents 'item'
             for dirset in self.nativeindex:
                 if os.path.basename(dirset[0]) == item:
-                    for subFile in dirset[FILES]:
+                    for subFile in dirset[OSW_FILES]:
                         subDir[item].append(self._prefix() + item + '/' + subFile)
                     self.items.append(subDir)
 
