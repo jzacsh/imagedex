@@ -104,8 +104,7 @@ class Imagedex():
                 else:
                     #dealing with only files is simple, structure is already
                     #useful to json.dumps()
-                    for item in self.nativeindex:
-                        self.items.append(self._prefix() + item)
+                    self.renderJSONFiles(self.nativeindex)
 
                 #let simplejson.dumps() do its thing
                 index += json.dumps(self.items)
@@ -207,7 +206,7 @@ class Imagedex():
     def renderJSONFiles(self, files):
         """render files, according to the JSON format we publish"""
         for item in files:
-            self.items.append(item)
+            self.items.append(self._prefix() + item)
 
     def renderJSONDirs(self):
         """render directories, according to the JSON format we publish
@@ -218,7 +217,7 @@ class Imagedex():
         for item in self.nativeindex[self.rendering][DIRS]:
             subDir = { item : [] }
             for subFile in self.nativeindex[self.rendering][FILES]:
-                subDir[item].append(subFile)
+                subDir[item].append(self._prefix() + subFile)
             self.items.append(subDir)
 
 # vim: et:ts=4:sw=4:sts=4
