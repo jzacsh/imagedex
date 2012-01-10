@@ -216,8 +216,12 @@ class Imagedex():
         """
         for item in self.nativeindex[self.rendering][DIRS]:
             subDir = { item : [] }
-            for subFile in self.nativeindex[self.rendering][FILES]:
-                subDir[item].append(self._prefix() + subFile)
-            self.items.append(subDir)
+
+            #find the directory listing in our tuple, that represents 'item'
+            for dirset in self.nativeindex:
+                if os.path.basename(dirset[0]) == item:
+                    for subFile in dirset[FILES]:
+                        subDir[item].append(self._prefix() + item + '/' + subFile)
+                    self.items.append(subDir)
 
 # vim: et:ts=4:sw=4:sts=4
