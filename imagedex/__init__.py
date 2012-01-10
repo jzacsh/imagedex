@@ -159,6 +159,7 @@ class Imagedex():
         easily passed to json.dumps().
 
         os.walk produces a list of tuples as such:
+            #  OSW_LABEL   OSW_DIRS      OSW_FILES
             [('item#', "item's dirs", "item's files"), (...), ... ]
 
         we want a structure, in JSON, as such:
