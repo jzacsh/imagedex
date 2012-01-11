@@ -61,6 +61,9 @@ def config():
         default=defs.native, help='Output native python data, for instead of'
         ' converting to JSON. (Note: returned data structure is different,'
         ' depending on -r flag).')
+    parser.add_option('-j', '--jsonp', dest='jsonp',
+        help="Static JSONP function name you'd like to wrap your output in"
+        " (eg.: 'funcName').")
 
     return parser
 
@@ -116,7 +119,12 @@ class Imagedex():
             else:
                 index = '{ "%s": [] } ' % (self.conf.prop)
 
-        return index
+
+        #handle jsonp option
+        if self.conf.jsonp:
+            return self.conf.jsonp + '(' + index + ')'
+        else:
+            return index
 
     def _prefix(self):
         """Generate a default prefix based on our base PATH
