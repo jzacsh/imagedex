@@ -64,5 +64,6 @@ done
 
 ##Notes:
 * Be aware that the `-r` recursive option is a lie and only provides data for a single directory level down.
+* As this script is just a wrapper around the python module, `simplejson` it must be installed.
 
 [apid]: https://github.com/jzacsh/bin/blob/master/share/api_drawings#L20-28
