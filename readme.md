@@ -59,7 +59,10 @@ while inotifywait --excludei='.*.swp' -r -e modify "/some/dir/"; do
 done
 ```
 
-#TODO:
+##TODO:
 * Write proper unit tests for all our little quirks
+
+##Notes:
+* Be aware that the `-r` recursive option is a lie and only provides data for a single directory level down.
 
 [apid]: https://github.com/jzacsh/bin/blob/master/share/api_drawings#L20-28
