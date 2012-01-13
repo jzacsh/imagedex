@@ -1,7 +1,7 @@
 Generate a JSON representation of a given directory listing, like so:
 
 ```bash
-$ imagedex -P repo ./ | python -mjson.tool
+$ imagedex -r -P repo ./ | python -mjson.tool
 ```
 
 ```javascript
