@@ -54,8 +54,8 @@ jsonPcallBack({
   For a live example, see [`api_drawings`][apid] script I run on my web server:
 
 ```bash
-while inotifywait --excludei='.*.swp' -r -e modify "/some/dir/"; do
-    imagedex -j callBack -p '/api/3/' -r -f /api/path/imagedex.json /some/dir
+while inotifywait --excludei='.*.swp' -r -e modify /some/dir/; do
+    imagedex -r -j callBack -p '/api/3/' -f /api/path/imagedex.json /some/dir
 done
 ```
 
