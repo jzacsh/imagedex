@@ -7,24 +7,24 @@ $ imagedex -r -P repo ./ | python -mjson.tool
 ```javascript
 {
     "repo": [
-        "./.gitignore", 
-        "./imagedex.py", 
-        "./readme.md", 
+        "./.gitignore",
+        "./imagedex.py",
+        "./readme.md",
         {
             ".git": [
-                "./.git/packed-refs", 
-                "./.git/FETCH_HEAD", 
-                "./.git/description", 
-                "./.git/ORIG_HEAD", 
-                "./.git/COMMIT_EDITMSG", 
-                "./.git/HEAD", 
-                "./.git/index", 
+                "./.git/packed-refs",
+                "./.git/FETCH_HEAD",
+                "./.git/description",
+                "./.git/ORIG_HEAD",
+                "./.git/COMMIT_EDITMSG",
+                "./.git/HEAD",
+                "./.git/index",
                 "./.git/config"
             ]
-        }, 
+        },
         {
             "imagedex": [
-                "./imagedex/__init__.py", 
+                "./imagedex/__init__.py",
                 "./imagedex/__init__.pyc"
             ]
         }
